@@ -68,6 +68,86 @@ def _crear_bici(id_bici, estado):
     lista_veces_alquilada.append(0)
 
 
+
+
+# ---------------------------------------------------------------------------
+# FUNCIONES DE CONSULTA DE DISPONIBILIDAD
+# ---------------------------------------------------------------------------
+def cantidad_disponiblesexc():
+    total = 0
+    for i in range(len(lista_id_bicicleta)):
+        if lista_estado[i] == "excelente" and lista_disponible[i]:
+            total += 1
+    return total
+
+
+def cantidad_disponiblebueno():
+    total = 0
+    for i in range(len(lista_id_bicicleta)):
+        if lista_estado[i] == "bueno" and lista_disponible[i]:
+            total += 1
+    return total
+
+
+def cantidad_disponiblereg():
+    total = 0
+    for i in range(len(lista_id_bicicleta)):
+        if lista_estado[i] == "regular" and lista_disponible[i]:
+            total += 1
+    return total
+
+
+def cantidad_disponibles_total():
+    return cantidad_disponiblesexc() + cantidad_disponiblebueno() + cantidad_disponiblereg()
+
+
+def cantidad_en_uso():
+    total = 0
+    for dni in lista_dni:
+        if dni != 0:
+            total += 1
+    return total
+
+
+def cantidad_en_uso_por_estado(estado):
+    total = 0
+    for i in range(len(lista_id_bicicleta)):
+        if lista_estado[i] == estado and lista_dni[i] != 0:
+            total += 1
+    return total
+
+
+def cantidad_mantenimiento():
+    total = 0
+    for estado in lista_estado:
+        if estado == "mantenimiento":
+            total += 1
+    return total
+
+
+def obtener_ID(estado_buscado):
+    """Devuelve el primer ID de bici disponible en el estado pedido, o -1."""
+    for i in range(len(lista_id_bicicleta)):
+        if lista_estado[i] == estado_buscado and lista_disponible[i]:
+            return lista_id_bicicleta[i]
+    return -1
+
+
+def _index_por_id(id_bici):
+    if id_bici in lista_id_bicicleta:
+        return lista_id_bicicleta.index(id_bici)
+    return -1
+
+
+def _precio_por_estado(estado):
+    if estado == "excelente":
+        return precio_excelente
+    if estado == "bueno":
+        return precio_bueno
+    if estado == "regular":
+        return precio_regular
+    return 0.0
+
 if __name__ == "__main__":
     inicializar_sistema()
     print(f"Sistema inicializado con {len(lista_id_bicicleta)} bicicletas.")
