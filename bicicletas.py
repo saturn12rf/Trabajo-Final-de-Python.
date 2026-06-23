@@ -148,6 +148,38 @@ def _precio_por_estado(estado):
         return precio_regular
     return 0.0
 
+
+# ---------------------------------------------------------------------------
+# ENTRADA DE DATOS AUXILIARES (con validación básica)
+# ---------------------------------------------------------------------------
+def pedir_entero(mensaje):
+    while True:
+        valor = input(mensaje).strip()
+        if valor.lstrip("-").isdigit():
+            return int(valor)
+        print("Error: debe ingresar un número entero.")
+
+
+def pedir_dni():
+    while True:
+        dni = pedir_entero("Ingrese su DNI (8 dígitos): ")
+        if dni == 0:
+            print("Error: el DNI no puede ser 0. Intente nuevamente.")
+            continue
+        if len(str(dni)) != 8:
+            print("Error: el DNI debe tener 8 dígitos.")
+            continue
+        return dni
+
+
+def pedir_metodo_pago():
+    while True:
+        metodo = input("Método de pago (td=tarjeta débito, tc=tarjeta crédito, "
+                        "t=transferencia, e=efectivo): ").strip().lower()
+        if metodo in ("td", "tc", "t", "e"):
+            return metodo
+        print("Error: opción de pago inválida.")
+
 if __name__ == "__main__":
     inicializar_sistema()
     print(f"Sistema inicializado con {len(lista_id_bicicleta)} bicicletas.")
