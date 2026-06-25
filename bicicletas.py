@@ -180,6 +180,90 @@ def pedir_metodo_pago():
             return metodo
         print("Error: opción de pago inválida.")
 
+
+# ---------------------------------------------------------------------------
+# PROCEDIMIENTO: ALQUILAR
+# ---------------------------------------------------------------------------
+def alquilar():
+    global ID_seleccionado
+    print("\n--- Alquilar bicicleta ---")
+    print("1) Excelente")
+    print("2) Bueno")
+    print("3) Regular")
+    opcion = input("Seleccione el tipo de bicicleta: ").strip()
+
+    mapa_estados = {"1": "excelente", "2": "bueno", "3": "regular"}
+    if opcion not in mapa_estados:
+        print("Opción inválida. Volviendo al menú principal.")
+        return
+
+    estado_buscado = mapa_estados[opcion]
+    ID_seleccionado = obtener_ID(estado_buscado)
+
+    if ID_seleccionado == -1:
+        print(f"No hay bicicletas disponibles en estado '{estado_buscado}'. "
+              f"Volviendo al menú principal.")
+        ID_seleccionado = 0
+        return
+
+    dni = pedir_dni()
+    if dni in lista_dni:
+        print("Error: el usuario con ese DNI ya alquiló una bicicleta. "
+              "No puede tener más de 1 bicicleta alquilada al mismo tiempo.")
+        ID_seleccionado = 0
+        return
+
+    nombre_apellido = input("Ingrese su nombre y apellido: ").strip()[:50]
+    metodo_pago = pedir_metodo_pago()
+
+    horas = pedir_entero("Ingrese la cantidad de horas de alquiler (mínimo 1): ")
+    while horas < 1:
+        print("Error: el alquiler es de mínimo 1 hora.")
+        horas = pedir_entero("Ingrese la cantidad de horas de alquiler (mínimo 1): ")
+
+    precio_hora = _precio_por_estado(estado_buscado)
+    costo_total = precio_hora * horas
+    if metodo_pago == "e":
+        costo_total *= (1 - DESCUENTO)
+
+    print(f"\nResumen del alquiler:")
+    print(f"  Bicicleta ID: {ID_seleccionado} ({estado_buscado})")
+    print(f"  Usuario: {nombre_apellido} (DNI: {dni})")
+    print(f"  Horas: {horas}")
+    print(f"  Costo total: ${costo_total:.2f}")
+    confirmar = input("¿Confirma el alquiler? (s/n): ").strip().lower()
+
+    if confirmar != "s":
+        print("Alquiler cancelado. Volviendo al menú principal.")
+        ID_seleccionado = 0
+        return
+
+    idx = _index_por_id(ID_seleccionado)
+    lista_dni[idx] = dni
+    lista_disponible[idx] = False
+    lista_veces_alquilada[idx] += 1
+    lista_horas_uso[idx] += horas
+
+    _actualizar_acumuladores(estado_buscado, horas, costo_total)
+
+    print("¡Alquiler realizado con éxito!")
+    ID_seleccionado = 0
+
+
+def _actualizar_acumuladores(estado, horas, costo_total):
+    global horas_uso_excelente, horas_uso_bueno, horas_uso_regular
+    global recaudado_excelente, recaudado_bueno, recaudado_regular
+
+    if estado == "excelente":
+        horas_uso_excelente += horas
+        recaudado_excelente += costo_total
+    elif estado == "bueno":
+        horas_uso_bueno += horas
+        recaudado_bueno += costo_total
+    elif estado == "regular":
+        horas_uso_regular += horas
+        recaudado_regular += costo_total
+
 if __name__ == "__main__":
     inicializar_sistema()
     print(f"Sistema inicializado con {len(lista_id_bicicleta)} bicicletas.")
