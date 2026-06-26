@@ -264,6 +264,30 @@ def _actualizar_acumuladores(estado, horas, costo_total):
         horas_uso_regular += horas
         recaudado_regular += costo_total
 
+
+# ---------------------------------------------------------------------------
+# PROCEDIMIENTO: DEVOLVER
+# ---------------------------------------------------------------------------
+def devolver():
+    print("\n--- Devolver bicicleta ---")
+    while True:
+        dni = pedir_entero("Ingrese su DNI: ")
+        if dni == 0:
+            print("Error: el DNI no puede ser 0. Intente nuevamente.")
+            continue
+        if dni not in lista_dni:
+            print("El DNI no se encuentra en la lista.")
+            opcion = input("¿Desea intentarlo de nuevo? (s) o volver al menú principal (n): ").strip().lower()
+            if opcion == "n":
+                return
+            continue
+        break
+
+    idx = lista_dni.index(dni)
+    lista_disponible[idx] = True
+    lista_dni[idx] = 0
+    print(f"Bicicleta ID {lista_id_bicicleta[idx]} devuelta con éxito. ¡Gracias!")
+
 if __name__ == "__main__":
     inicializar_sistema()
     print(f"Sistema inicializado con {len(lista_id_bicicleta)} bicicletas.")
