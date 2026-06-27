@@ -288,6 +288,55 @@ def devolver():
     lista_dni[idx] = 0
     print(f"Bicicleta ID {lista_id_bicicleta[idx]} devuelta con éxito. ¡Gracias!")
 
+
+# ---------------------------------------------------------------------------
+# MENÚ CLIENTE
+# ---------------------------------------------------------------------------
+def consultar_precio_disponibilidad():
+    print("\n--- Precio, disponibilidad y detalles de las bicicletas ---")
+    datos = [
+        ("Excelente", precio_excelente, cantidad_disponiblesexc()),
+        ("Bueno", precio_bueno, cantidad_disponiblebueno()),
+        ("Regular", precio_regular, cantidad_disponiblereg()),
+    ]
+    for nombre, precio, disponibles in datos:
+        print(f"  {nombre}: ${precio:.2f}/hora — {disponibles} disponibles")
+
+    print("\nDetalle por bicicleta:")
+    for i in range(len(lista_id_bicicleta)):
+        print(f"  ID {lista_id_bicicleta[i]} | Estado: {lista_estado[i]} | "
+              f"Horas de uso hoy: {lista_horas_uso[i]} | "
+              f"Veces alquilada hoy: {lista_veces_alquilada[i]}")
+
+
+def menu():
+    while True:
+        print("\n===== MENÚ PRINCIPAL =====")
+        print("1) Consultar precio, disponibilidad y detalles de las bicicletas")
+        print("2) Alquilar bicicleta")
+        print("3) Devolver bicicleta")
+        print("4) Ingresar como administrador")
+        print("5) Salir")
+        opcion = input("Seleccione una opción: ").strip()
+
+        if opcion == "1":
+            consultar_precio_disponibilidad()
+        elif opcion == "2":
+            alquilar()
+        elif opcion == "3":
+            devolver()
+        elif opcion == "4":
+            dni_ingresado = pedir_entero("Ingrese DNI: ")
+            if dni_ingresado == ID_ADMIN:
+                menu_administrador()
+            else:
+                print("Acceso denegado.")
+        elif opcion == "5":
+            print("¡Hasta luego!")
+            break
+        else:
+            print("Opción inválida.")
+
 if __name__ == "__main__":
     inicializar_sistema()
     print(f"Sistema inicializado con {len(lista_id_bicicleta)} bicicletas.")
