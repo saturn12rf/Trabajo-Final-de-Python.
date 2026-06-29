@@ -337,6 +337,53 @@ def menu():
         else:
             print("Opción inválida.")
 
+
+# ---------------------------------------------------------------------------
+# ADMINISTRADOR: DAR DE BAJA / REINCORPORAR BICICLETA
+# ---------------------------------------------------------------------------
+def dar_de_baja():
+    print("\n--- Dar de baja bicicleta ---")
+    id_bici = pedir_entero("Ingrese el ID de la bicicleta a dar de baja: ")
+    idx = _index_por_id(id_bici)
+    if idx == -1:
+        print("Error: no existe una bicicleta con ese ID.")
+        return
+
+    if lista_dni[idx] != 0:
+        print("Error: la bicicleta debe estar en estado disponible para poder darla de baja.")
+        return
+
+    lista_estado[idx] = "mantenimiento"
+    lista_disponible[idx] = False
+    print(f"Bicicleta ID {id_bici} dada de baja (en mantenimiento).")
+
+
+def volver_a_poner_bicicleta():
+    print("\n--- Volver a incorporar bicicleta ---")
+    id_bici = pedir_entero("Ingrese el ID de la bicicleta a incorporar: ")
+    idx = _index_por_id(id_bici)
+    if idx == -1:
+        print("Error: no existe una bicicleta con ese ID.")
+        return
+
+    if lista_estado[idx] != "mantenimiento":
+        print("Error: no se puede dar de alta una bici que no se dio de baja.")
+        print("Pruebe con otro ID o vuelva al menú principal.")
+        return
+
+    nuevo_estado = _pedir_estado_valido()
+    lista_estado[idx] = nuevo_estado
+    lista_disponible[idx] = True
+    print(f"Bicicleta ID {id_bici} incorporada nuevamente en estado '{nuevo_estado}'.")
+
+
+def _pedir_estado_valido():
+    while True:
+        estado = input("Ingrese el estado de la bicicleta (excelente/bueno/regular): ").strip().lower()
+        if estado in ("excelente", "bueno", "regular"):
+            return estado
+        print("Error: estado inválido.")
+
 if __name__ == "__main__":
     inicializar_sistema()
     print(f"Sistema inicializado con {len(lista_id_bicicleta)} bicicletas.")
