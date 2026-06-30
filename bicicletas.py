@@ -384,6 +384,41 @@ def _pedir_estado_valido():
             return estado
         print("Error: estado inválido.")
 
+
+# ---------------------------------------------------------------------------
+# ADMINISTRADOR: AÑADIR BICICLETA Y MODIFICAR PRECIOS
+# ---------------------------------------------------------------------------
+def añadir_bicicleta():
+    print("\n--- Añadir bicicleta ---")
+    estado = _pedir_estado_valido()
+    nuevo_id = max(lista_id_bicicleta) + 1 if lista_id_bicicleta else 1
+    _crear_bici(nuevo_id, estado)
+    print(f"Bicicleta añadida con éxito. Nuevo ID: {nuevo_id}, estado: {estado}.")
+
+
+def modificar_precios():
+    global precio_excelente, precio_bueno, precio_regular
+    print("\n--- Modificar precios ---")
+    estado = _pedir_estado_valido()
+    nuevo_precio = -1
+    while nuevo_precio < 0:
+        try:
+            nuevo_precio = float(input("Ingrese el nuevo precio: ").strip())
+            if nuevo_precio < 0:
+                print("Error: el precio no puede ser negativo.")
+        except ValueError:
+            print("Error: debe ingresar un número.")
+            nuevo_precio = -1
+
+    if estado == "excelente":
+        precio_excelente = nuevo_precio
+    elif estado == "bueno":
+        precio_bueno = nuevo_precio
+    elif estado == "regular":
+        precio_regular = nuevo_precio
+
+    print(f"Precio de '{estado}' actualizado a ${nuevo_precio:.2f}/hora.")
+
 if __name__ == "__main__":
     inicializar_sistema()
     print(f"Sistema inicializado con {len(lista_id_bicicleta)} bicicletas.")
