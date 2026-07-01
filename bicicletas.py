@@ -419,6 +419,68 @@ def modificar_precios():
 
     print(f"Precio de '{estado}' actualizado a ${nuevo_precio:.2f}/hora.")
 
+
+# ---------------------------------------------------------------------------
+# ADMINISTRADOR: ESTADÍSTICAS Y MENÚ
+# ---------------------------------------------------------------------------
+def ver_estadisticas():
+    print("\n===== ESTADÍSTICAS DEL DÍA =====")
+    total_recaudado = recaudado_excelente + recaudado_bueno + recaudado_regular
+    total_horas = horas_uso_excelente + horas_uso_bueno + horas_uso_regular
+
+    print(f"Total recaudado: ${total_recaudado:.2f}")
+    print(f"  Excelente: ${recaudado_excelente:.2f}")
+    print(f"  Bueno: ${recaudado_bueno:.2f}")
+    print(f"  Regular: ${recaudado_regular:.2f}")
+
+    print(f"\nTotal horas alquiladas: {total_horas}")
+    print(f"  Excelente: {horas_uso_excelente}")
+    print(f"  Bueno: {horas_uso_bueno}")
+    print(f"  Regular: {horas_uso_regular}")
+
+    print(f"\nBicicletas disponibles totales: {cantidad_disponibles_total()}")
+    print(f"  Excelente: {cantidad_disponiblesexc()}")
+    print(f"  Bueno: {cantidad_disponiblebueno()}")
+    print(f"  Regular: {cantidad_disponiblereg()}")
+
+    print(f"\nBicicletas en uso: {cantidad_en_uso()}")
+    print(f"  Excelente: {cantidad_en_uso_por_estado('excelente')}")
+    print(f"  Bueno: {cantidad_en_uso_por_estado('bueno')}")
+    print(f"  Regular: {cantidad_en_uso_por_estado('regular')}")
+
+    print(f"\nBicicletas en mantenimiento: {cantidad_mantenimiento()}")
+
+
+def menu_administrador():
+    while True:
+        print("\n===== MENÚ ADMINISTRADOR =====")
+        print("1) Dar de baja bicicleta")
+        print("2) Volver a poner en funcionamiento una bicicleta")
+        print("3) Añadir bicicleta")
+        print("4) Modificar precios")
+        print("5) Ver estadísticas")
+        print("6) Cerrar programa")
+        print("7) Volver al menú principal")
+        opcion = input("Seleccione una opción: ").strip()
+
+        if opcion == "1":
+            dar_de_baja()
+        elif opcion == "2":
+            volver_a_poner_bicicleta()
+        elif opcion == "3":
+            añadir_bicicleta()
+        elif opcion == "4":
+            modificar_precios()
+        elif opcion == "5":
+            ver_estadisticas()
+        elif opcion == "6":
+            print("Cerrando programa...")
+            exit(0)
+        elif opcion == "7":
+            return
+        else:
+            print("Opción inválida.")
+
 if __name__ == "__main__":
     inicializar_sistema()
     print(f"Sistema inicializado con {len(lista_id_bicicleta)} bicicletas.")
