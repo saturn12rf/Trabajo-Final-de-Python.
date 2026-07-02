@@ -483,4 +483,5 @@ def menu_administrador():
 
 if __name__ == "__main__":
     inicializar_sistema()
-    print(f"Sistema inicializado con {len(lista_id_bicicleta)} bicicletas.")
+    print("Bienvenido/a al sistema de alquiler de bicicletas.")
+    menu()
